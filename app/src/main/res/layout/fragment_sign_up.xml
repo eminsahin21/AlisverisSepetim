@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_signup"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_bg2"
+    tools:context=".SignUpFragment">
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="347dp"
+        android:layout_height="557dp"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/white_rounded_rectangle"
+        android:elevation="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <LinearLayout
+        android:layout_width="312dp"
+        android:layout_height="517dp"
+        android:elevation="15dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/view"
+        app:layout_constraintEnd_toEndOf="@+id/view"
+        app:layout_constraintStart_toStartOf="@+id/view"
+        app:layout_constraintTop_toTopOf="@+id/view">
+
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/img_7" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/img_11" />
+
+        <EditText
+            android:id="@+id/editTextnameText"
+            android:layout_width="295dp"
+            android:layout_height="46dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/rounded_inputs"
+            android:elevation="15dp"
+            android:ems="10"
+            android:inputType="text"
+            android:hint="Name"/>
+
+        <EditText
+            android:id="@+id/editTextEpostaText"
+            android:layout_width="295dp"
+            android:layout_height="46dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/rounded_inputs"
+            android:elevation="15dp"
+            android:ems="10"
+            android:inputType="text"
+            android:hint="E-Posta"/>
+        <EditText
+            android:id="@+id/editTextPasswordText"
+            android:layout_width="295dp"
+            android:layout_height="46dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/rounded_inputs"
+            android:elevation="15dp"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:hint="******"/>
+
+        <Button
+            android:id="@+id/button_signup"
+            android:layout_width="295dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:backgroundTint="#1D61E7"
+            android:text="Kayıt Ol"
+            android:textSize="15sp"
+            app:cornerRadius="12dp"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="58dp"
+            tools:layout_editor_absoluteY="667dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="20dp"
+            android:paddingLeft="15dp"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+
+            <TextView
+                android:id="@+id/alttext"
+                android:layout_width="20dp"
+                android:textSize="12sp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAlignment="textEnd"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="30dp"
+                android:text="Hesabınız var mı?" />
+
+            <TextView
+                android:id="@+id/girisyap_text"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingEnd="20dp"
+                android:text="Giriş"
+                android:textAlignment="textStart"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
