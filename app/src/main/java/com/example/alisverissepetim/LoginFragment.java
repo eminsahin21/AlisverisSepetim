@@ -93,6 +93,7 @@ public class LoginFragment extends Fragment {
                             Intent intent = new Intent(requireContext(),HomeScreenActivity.class);
                             startActivity(intent);
                             requireActivity().finish();
+
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
