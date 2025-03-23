@@ -1,4 +1,4 @@
-package com.example.alisverissepetim;
+package com.example.alisverissepetim.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,8 +6,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
@@ -16,14 +14,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.alisverissepetim.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 
 public class LoginFragment extends Fragment {
@@ -40,6 +39,12 @@ public class LoginFragment extends Fragment {
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            Intent intent = new Intent(getActivity(),HomeScreenActivity.class);
+            startActivity(intent);
+            getActivity().finish();
+        }
 
     }
 
@@ -82,14 +87,22 @@ public class LoginFragment extends Fragment {
 
         String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();
+        final boolean[] isValid = {true};
 
         if (email.equals("") || password.equals("")) {
             Toast.makeText(requireContext(),"Enter email or password!",Toast.LENGTH_LONG).show();
+            isValid[0] = false;
+            emailEditText.setBackgroundResource(R.drawable.red_border);
+            passwordEditText.setBackgroundResource(R.drawable.red_border);
         }else {
             mAuth.signInWithEmailAndPassword(email, password)
                     .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
+                            isValid[0] = true;
+                            emailEditText.setBackgroundResource(R.drawable.default_border);
+                            passwordEditText.setBackgroundResource(R.drawable.default_border);
+
                             Intent intent = new Intent(requireContext(),HomeScreenActivity.class);
                             startActivity(intent);
                             requireActivity().finish();
@@ -99,6 +112,9 @@ public class LoginFragment extends Fragment {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             Toast.makeText(requireContext(),e.getLocalizedMessage(),Toast.LENGTH_LONG).show();
+                            isValid[0] = false;
+                            emailEditText.setBackgroundResource(R.drawable.red_border);
+                            passwordEditText.setBackgroundResource(R.drawable.red_border);
                         }
                     });
         }
@@ -107,6 +123,9 @@ public class LoginFragment extends Fragment {
 
     public void goToSignUp(View view){
         NavDirections action = LoginFragmentDirections.actionLoginFragmentToSignUpFragment();
-        Navigation.findNavController(view).navigate(action);
+
+        if (isAdded() && getView() != null) {
+            Navigation.findNavController(getView()).navigate(action);
+        }
     }
 }

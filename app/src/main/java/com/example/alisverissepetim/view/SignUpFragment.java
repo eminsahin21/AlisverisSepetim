@@ -1,4 +1,4 @@
-package com.example.alisverissepetim;
+package com.example.alisverissepetim.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
+import com.example.alisverissepetim.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
@@ -83,8 +84,11 @@ public class SignUpFragment extends Fragment {
             mAuth.createUserWithEmailAndPassword(email,password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                 @Override
                 public void onSuccess(AuthResult authResult) {
+                    mAuth.signOut();
                     NavDirections action = SignUpFragmentDirections.actionSignUpFragmentToLoginFragment();
-                    Navigation.findNavController(requireView()).navigate(action);
+                    if (isAdded() && getView() != null) {
+                        Navigation.findNavController(getView()).navigate(action);
+                    }
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -97,6 +101,8 @@ public class SignUpFragment extends Fragment {
 
     public void goToLogin(View view){
         NavDirections action = SignUpFragmentDirections.actionSignUpFragmentToLoginFragment();
-        Navigation.findNavController(view).navigate(action);
+        if (isAdded() && getView()  != null) {
+            Navigation.findNavController(getView()).navigate(action);
+        }
     }
 }

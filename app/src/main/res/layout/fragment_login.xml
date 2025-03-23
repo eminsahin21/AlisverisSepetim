@@ -6,13 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_bg"
-    tools:context=".LoginFragment"
-
-    >
+    tools:context=".view.LoginFragment">
 
 
     <View
-        android:id="@+id/view"
+        android:id="@+id/view_login"
         android:layout_width="347dp"
         android:layout_height="557dp"
         android:layout_centerInParent="true"
@@ -32,10 +30,10 @@
         android:gravity="center"
         android:orientation="vertical"
         android:paddingBottom="20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/view"
-        app:layout_constraintEnd_toEndOf="@+id/view"
-        app:layout_constraintStart_toStartOf="@+id/view"
-        app:layout_constraintTop_toTopOf="@+id/view">
+        app:layout_constraintBottom_toBottomOf="@+id/view_login"
+        app:layout_constraintEnd_toEndOf="@+id/view_login"
+        app:layout_constraintStart_toStartOf="@+id/view_login"
+        app:layout_constraintTop_toTopOf="@+id/view_login">
 
         <ImageView
             android:id="@+id/imageView7"
@@ -83,12 +81,13 @@
         <Button
             android:id="@+id/button_login"
             android:layout_width="295dp"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             android:layout_marginBottom="10dp"
-            android:backgroundTint="#1D61E7"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/mybutton"
             android:text="Giriş"
+            android:textColor="@color/white"
             android:textSize="15sp"
-            app:cornerRadius="12dp"
             tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteX="58dp"
             tools:layout_editor_absoluteY="667dp" />

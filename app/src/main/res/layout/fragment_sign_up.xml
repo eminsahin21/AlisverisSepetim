@@ -6,10 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_bg2"
-    tools:context=".SignUpFragment">
+    tools:context=".view.SignUpFragment">
 
     <View
-        android:id="@+id/view"
+        android:id="@+id/view_signup"
         android:layout_width="347dp"
         android:layout_height="557dp"
         android:layout_centerInParent="true"
@@ -28,10 +28,10 @@
         android:elevation="15dp"
         android:gravity="center"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="@+id/view"
-        app:layout_constraintEnd_toEndOf="@+id/view"
-        app:layout_constraintStart_toStartOf="@+id/view"
-        app:layout_constraintTop_toTopOf="@+id/view">
+        app:layout_constraintBottom_toBottomOf="@+id/view_signup"
+        app:layout_constraintEnd_toEndOf="@+id/view_signup"
+        app:layout_constraintStart_toStartOf="@+id/view_signup"
+        app:layout_constraintTop_toTopOf="@+id/view_signup">
 
 
         <ImageView
@@ -54,8 +54,8 @@
             android:background="@drawable/rounded_inputs"
             android:elevation="15dp"
             android:ems="10"
-            android:inputType="text"
-            android:hint="Name"/>
+            android:hint="Name"
+            android:inputType="text" />
 
         <EditText
             android:id="@+id/editTextEpostaText"
@@ -65,8 +65,9 @@
             android:background="@drawable/rounded_inputs"
             android:elevation="15dp"
             android:ems="10"
-            android:inputType="text"
-            android:hint="E-Posta"/>
+            android:hint="E-Posta"
+            android:inputType="text" />
+
         <EditText
             android:id="@+id/editTextPasswordText"
             android:layout_width="295dp"
@@ -75,18 +76,19 @@
             android:background="@drawable/rounded_inputs"
             android:elevation="15dp"
             android:ems="10"
-            android:inputType="textPassword"
-            android:hint="******"/>
+            android:hint="******"
+            android:inputType="textPassword" />
 
         <Button
             android:id="@+id/button_signup"
             android:layout_width="295dp"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             android:layout_marginBottom="10dp"
-            android:backgroundTint="#1D61E7"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/mybutton"
             android:text="Kayıt Ol"
+            android:textColor="@color/white"
             android:textSize="15sp"
-            app:cornerRadius="12dp"
             tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteX="58dp"
             tools:layout_editor_absoluteY="667dp" />
@@ -94,22 +96,22 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:layout_marginTop="20dp"
-            android:paddingLeft="15dp"
             android:layout_gravity="center"
-            android:gravity="center">
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:paddingLeft="15dp">
 
 
             <TextView
                 android:id="@+id/alttext"
                 android:layout_width="20dp"
-                android:textSize="12sp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textAlignment="textEnd"
-                android:layout_marginRight="10dp"
                 android:layout_marginLeft="30dp"
-                android:text="Hesabınız var mı?" />
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:text="Hesabınız var mı?"
+                android:textAlignment="textEnd"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/girisyap_text"
