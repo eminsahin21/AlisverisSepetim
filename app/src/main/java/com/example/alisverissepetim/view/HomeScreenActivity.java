@@ -2,14 +2,18 @@ package com.example.alisverissepetim.view;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.alisverissepetim.R;
@@ -21,12 +25,9 @@ import java.util.ArrayList;
 
 public class HomeScreenActivity extends AppCompatActivity {
 
-
-    RecyclerView recyclerView;
-    RecyclerviewAdapter recyclerviewAdapter;
-    ArrayList<ShoppingList> shoppingList = new ArrayList<>();
     FirebaseAuth firebaseAuth;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,20 +35,17 @@ public class HomeScreenActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-        recyclerView = findViewById(R.id.recyclerView_home);
-        recyclerviewAdapter = new RecyclerviewAdapter(shoppingList);
-
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(recyclerviewAdapter);
-
-
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.top_app_bar_menu, menu);
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.more) {
-            Toast.makeText(this, "Çıkış yapılıyor...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(HomeScreenActivity.this, "Çıkış yapılıyor...", Toast.LENGTH_SHORT).show();
 
             firebaseAuth.signOut();
 
@@ -56,18 +54,5 @@ public class HomeScreenActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.top_app_bar_menu, menu);
-        return true;
-    }
-
-    public void sepetOlustur(View view){
-//        ShoppingList newItem = new ShoppingList("Ornek");
-//        recyclerviewAdapter.addItem(newItem);
-        SepetDialogFragment sepetDialog = new SepetDialogFragment();
-        sepetDialog.show(getSupportFragmentManager(), "SepetDialog");
     }
 }

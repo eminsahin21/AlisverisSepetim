@@ -2,6 +2,7 @@ package com.example.alisverissepetim.adapter;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.alisverissepetim.databinding.RecyclerRowBinding;
@@ -10,17 +11,11 @@ import java.util.ArrayList;
 
 public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapter.RowHolder> {
 
-    private ArrayList<ShoppingList> shoppingList = new ArrayList<>();
-
-    public void clearItems() {
-        shoppingList.clear(); // Listeyi temizle
-        notifyDataSetChanged(); // RecyclerView'i güncelle
-    }
+    private final ArrayList<ShoppingList> shoppingList;
 
     public RecyclerviewAdapter(ArrayList<ShoppingList> shoppingList) {
-        this.shoppingList = shoppingList;
+        this.shoppingList = (shoppingList != null) ? shoppingList : new ArrayList<>();
     }
-
     @NonNull
     @Override
     public RowHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -30,8 +25,10 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull RowHolder holder, int position) {
-        ShoppingList item = shoppingList.get(position);
-        holder.recyclerRowBinding.sepetName.setText(item.basketName);
+        ShoppingList sepet = shoppingList.get(position);
+        holder.sepetAdi.setText(sepet.getBasketName());
+        holder.sepetTur.setText(sepet.getBasketTur());
+        System.out.println("onBindViewHolder: " + sepet.getBasketName() + " / " + sepet.getBasketTur());
     }
 
     @Override
@@ -40,16 +37,19 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
     }
 
     public void addItem(ShoppingList newItem) {
-        shoppingList.add(newItem);
-        notifyDataSetChanged();
+        if (newItem != null) {
+            shoppingList.add(newItem);
+            notifyItemInserted(shoppingList.size() - 1); // Daha performanslı güncelleme
+        }
     }
 
     public static class RowHolder extends RecyclerView.ViewHolder {
-        RecyclerRowBinding recyclerRowBinding;
+        TextView sepetAdi, sepetTur;
 
         public RowHolder(RecyclerRowBinding recyclerRowBinding) {
             super(recyclerRowBinding.getRoot());
-            this.recyclerRowBinding = recyclerRowBinding;
+            sepetAdi = recyclerRowBinding.txtSepetAdi;
+            sepetTur = recyclerRowBinding.txtSepetTur;
         }
     }
-}
+} 

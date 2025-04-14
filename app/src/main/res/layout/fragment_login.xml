@@ -99,7 +99,7 @@
             android:src="@drawable/img_8" />
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/signInWithGoogle"
             android:layout_width="295dp"
             android:layout_height="50dp"
             android:layout_marginTop="0dp"

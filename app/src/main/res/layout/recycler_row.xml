@@ -1,22 +1,33 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="2dp">
+    android:orientation="horizontal"
+    android:layout_height="80dp"
+    android:layout_marginBottom="10dp"
+    android:background="#82ED06"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <TextView
+        android:id="@+id/txtSepetAdi"
+        android:layout_width="0dp"
+        android:textColor="@color/black"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:textSize="20sp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:visibility="visible"
+        android:text="Sepet Adı" />
 
     <TextView
-        android:id="@+id/sepetName"
-        android:layout_width="match_parent"
+        android:id="@+id/txtSepetTur"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
-        android:padding="5dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:textSize="22sp"
         android:textColor="@color/black"
-        android:text="TextView" />
-
-
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:textSize="20sp"
+        android:layout_weight="1"
+        android:gravity="end"
+        android:visibility="visible"
+        android:text="Sepet Türü" />
 </LinearLayout>

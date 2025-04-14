@@ -2,4 +2,6 @@
     <string name="app_name">AlisverisSepetim</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="default_web_client_id">800054786601-qv1hhl824m6h6diak667bivrslj8mrrh.apps.googleusercontent.com</string>
 </resources>

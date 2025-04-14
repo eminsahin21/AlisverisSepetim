@@ -1,34 +1,53 @@
 package com.example.alisverissepetim.view;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.credentials.GetCredentialRequest;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.alisverissepetim.R;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 
 public class LoginFragment extends Fragment {
 
     private FirebaseAuth mAuth;
     private EditText emailEditText, passwordEditText;
+
+    private GoogleSignInClient googleSignInClient;
+    private static final int RC_SIGN_IN = 9001;
+
+    private ActivityResultLauncher<Intent> googleSignInLauncher;
 
     public LoginFragment() {
 
@@ -46,13 +65,42 @@ public class LoginFragment extends Fragment {
             getActivity().finish();
         }
 
+        // Google Sign-In Yapılandırması
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id)) // Firebase Console'dan alınan Web Client ID
+                .requestEmail()
+                .build();
+
+        googleSignInClient = GoogleSignIn.getClient(requireContext(), gso);
+
+        googleSignInLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        try {
+                            GoogleSignInAccount account = GoogleSignIn.getSignedInAccountFromIntent(data)
+                                    .getResult(ApiException.class);
+                            if (account != null) {
+                                firebaseAuthWithGoogle(account);
+                            }
+                        } catch (ApiException e) {
+                            Log.w("Google Sign-In", "Google sign in failed", e);
+                        }
+                    }
+                }
+        );
+
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
+        ImageView button_login_google = view.findViewById(R.id.signInWithGoogle);
+        button_login_google.setOnClickListener(v -> signInWithGoogle());
+
+        return view;
     }
 
     @Override
@@ -62,6 +110,7 @@ public class LoginFragment extends Fragment {
         //buraya textview setonclicklistener kodları gelcek
         TextView kayitol_text = view.findViewById(R.id.kayitol_text);
         Button button_login = view.findViewById(R.id.button_login);
+
 
         emailEditText = view.findViewById(R.id.editTextEmailAddress);
         passwordEditText = view.findViewById(R.id.editTextPassword);
@@ -81,6 +130,28 @@ public class LoginFragment extends Fragment {
                 goToSignUp(view);
             }
         });
+    }
+
+    private void signInWithGoogle() {
+        Intent signInIntent = googleSignInClient.getSignInIntent();
+        googleSignInLauncher.launch(signInIntent);
+    }
+
+    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(requireActivity(), task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        Toast.makeText(requireContext(), "Giriş Başarılı: " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
+
+                        Intent intent = new Intent(requireContext(),HomeScreenActivity.class);
+                        startActivity(intent);
+
+                    } else {
+                        Toast.makeText(requireContext(), "Giriş Başarısız", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     public void signInAndGoToHomePage(){
