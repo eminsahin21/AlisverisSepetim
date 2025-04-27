@@ -2,26 +2,16 @@ package com.example.alisverissepetim.view;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.alisverissepetim.R;
-import com.example.alisverissepetim.model.ShoppingList;
-import com.example.alisverissepetim.adapter.RecyclerviewAdapter;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.ArrayList;
 
 public class HomeScreenActivity extends AppCompatActivity {
 
@@ -34,6 +24,9 @@ public class HomeScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home_screen);
 
         firebaseAuth = FirebaseAuth.getInstance();
+
+
+
 
     }
     @Override

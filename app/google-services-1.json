@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "800054786601",
+    "project_id": "alisverissepetim-b59cb",
+    "storage_bucket": "alisverissepetim-b59cb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:800054786601:android:a6fd25c411679c454f3a38",
+        "android_client_info": {
+          "package_name": "com.example.alisverissepetim"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "800054786601-16tggv0p19qme53iu6mfivreegpq7mva.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.alisverissepetim",
+            "certificate_hash": "fc5e78f9909b4e411c6f74b7357759ce727f2946"
+          }
+        },
+        {
+          "client_id": "800054786601-qv1hhl824m6h6diak667bivrslj8mrrh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDelHJBMm9tt-zo6HxYrNtq6KOQzzBk68Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "800054786601-qv1hhl824m6h6diak667bivrslj8mrrh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

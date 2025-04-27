@@ -1,17 +1,34 @@
 package com.example.alisverissepetim.adapter;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.alisverissepetim.databinding.RecyclerRowBinding;
 import com.example.alisverissepetim.model.ShoppingList;
 import java.util.ArrayList;
+import com.example.alisverissepetim.R;
+
+
 
 public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapter.RowHolder> {
 
     private final ArrayList<ShoppingList> shoppingList;
+
+    private OnItemClickListener listener;
+
+
+    public interface OnItemClickListener {
+        void onItemClick(ShoppingList sepet);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
     public RecyclerviewAdapter(ArrayList<ShoppingList> shoppingList) {
         this.shoppingList = (shoppingList != null) ? shoppingList : new ArrayList<>();
@@ -28,6 +45,14 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
         ShoppingList sepet = shoppingList.get(position);
         holder.sepetAdi.setText(sepet.getBasketName());
         holder.sepetTur.setText(sepet.getBasketTur());
+
+        // Tıklama olayı
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null && holder.getAdapterPosition() != RecyclerView.NO_POSITION) {
+                listener.onItemClick(shoppingList.get(holder.getAdapterPosition()));
+            }
+        });
+
         System.out.println("onBindViewHolder: " + sepet.getBasketName() + " / " + sepet.getBasketTur());
     }
 

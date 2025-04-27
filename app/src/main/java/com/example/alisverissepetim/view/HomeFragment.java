@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -51,12 +53,16 @@ public class HomeFragment extends Fragment{
         );
         recyclerView.scheduleLayoutAnimation();
 
+        //herhangi bir recyclerview öğesine tıklanması
+        recyclerviewAdapter.setOnItemClickListener(sepet -> {
+            goToDetailFragment(view, sepet);
+        });
+
 
         // FragmentResultListener ile SepetDialogFragment'tan gelen veriyi al
         getParentFragmentManager().setFragmentResultListener("sepetKey", this, (requestKey, bundle) -> {
             String sepetAdi = bundle.getString("sepetAdi");
             String sepetTur = bundle.getString("sepetTur");
-
 
 
             if (sepetAdi != null && !sepetAdi.isEmpty()) {
@@ -77,6 +83,14 @@ public class HomeFragment extends Fragment{
             sepetDialog.show(getParentFragmentManager(), "SepetDialog");
         });
 
+
+
+    }
+
+    private void goToDetailFragment(View view, ShoppingList sepet) {
+        NavDirections action = HomeFragmentDirections
+                .actionHomeFragmentToDetailFragment(sepet.getBasketName(), sepet.getBasketTur());
+        Navigation.findNavController(view).navigate(action);
     }
 
     @Override
