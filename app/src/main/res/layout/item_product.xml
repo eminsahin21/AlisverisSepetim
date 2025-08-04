@@ -1,47 +1,101 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- item_product.xml - Optimize edilmiş ürün kartı -->
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
 
     <LinearLayout
-        android:id="@+id/productCard"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:background="@color/white"
-        android:elevation="10dp"
-        android:gravity="center"
         android:orientation="vertical"
-        android:padding="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:padding="8dp">
 
+        <!-- Ürün Resmi -->
         <ImageView
             android:id="@+id/imageProduct"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:scaleType="centerCrop" />
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:scaleType="fitCenter"
+            android:background="@color/light_gray"
+            tools:src="@drawable/ic_placeholder" />
 
-        <TextView
-            android:id="@+id/txtProductName"
+        <!-- Ürün Bilgileri -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="Ürün Adı"
-            android:textAlignment="center"
-            android:textSize="14sp" />
+            android:orientation="vertical"
+            android:layout_marginTop="8dp">
 
-        <ImageView
-            android:id="@+id/btnAdd"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="8dp"
-            android:padding="8dp"
-            app:srcCompat="@android:drawable/ic_input_add" />
+            <!-- Ürün Adı -->
+            <TextView
+                android:id="@+id/txtProductName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ürün Adı"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:maxLines="2"
+                android:ellipsize="end" />
+
+            <!-- Fiyat -->
+            <TextView
+                android:id="@+id/txtProductPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0.00 TL"
+                android:textSize="12sp"
+                android:textColor="@color/price_color"
+                android:textStyle="bold"
+                android:layout_marginTop="4dp" />
+
+            <!-- Market Bilgileri -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp"
+                android:gravity="center_vertical">
+
+                <!-- Market Logosu -->
+                <ImageView
+                    android:id="@+id/imageMarketLogo"
+                    android:layout_width="35dp"
+                    android:layout_height="25dp"
+                    android:scaleType="centerCrop"
+                    android:layout_marginEnd="4dp"
+                    tools:src="@drawable/ic_placeholder" />
+
+                <!-- Market Adı -->
+                <TextView
+                    android:id="@+id/txtMarketName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Market Adı"
+                    android:textSize="14sp"
+                    android:textColor="@color/gray"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
+
+                <!-- Sepete Ekle Butonu -->
+                <ImageView
+                    android:id="@+id/btnAdd"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_add_circle" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

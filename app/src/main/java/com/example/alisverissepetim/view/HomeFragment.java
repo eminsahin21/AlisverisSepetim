@@ -55,7 +55,14 @@ public class HomeFragment extends Fragment{
 
         //herhangi bir recyclerview öğesine tıklanması
         recyclerviewAdapter.setOnItemClickListener(sepet -> {
-            goToDetailFragment(view, sepet);
+
+            if (sepet.getBasketTur() == "Markalı"){
+                goToLoadingFragment(view, sepet);
+            }else {
+                goToSimpleListFragment(view,sepet);
+            }
+
+
         });
 
 
@@ -87,9 +94,17 @@ public class HomeFragment extends Fragment{
 
     }
 
-    private void goToDetailFragment(View view, ShoppingList sepet) {
+    private void goToSimpleListFragment(View view, ShoppingList sepet) {
+        // HomeFragment'tan SimpleListFragment'a yönlendirme
         NavDirections action = HomeFragmentDirections
-                .actionHomeFragmentToDetailFragment(sepet.getBasketName(), sepet.getBasketTur());
+                .actionHomeFragmentToSimpleListFragment(sepet.getBasketName(), sepet.getBasketTur());
+        Navigation.findNavController(view).navigate(action);
+    }
+
+    private void goToLoadingFragment(View view, ShoppingList sepet) {
+        // HomeFragment'tan LoadingFragment'a yönlendirme
+        NavDirections action = HomeFragmentDirections
+                .actionHomeFragmentToLoadingFragment(sepet.getBasketName(), sepet.getBasketTur());
         Navigation.findNavController(view).navigate(action);
     }
 

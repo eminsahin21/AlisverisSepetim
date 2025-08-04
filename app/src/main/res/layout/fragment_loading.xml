@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@drawable/gradient_background"
+    android:padding="32dp">
+
+    <!-- Ana Logo -->
+    <ImageView
+        android:id="@+id/logoImageView"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/supermarketsepet"
+        android:layout_marginBottom="32dp"
+        android:scaleType="centerCrop"
+        android:elevation="8dp"/>
+
+    <!-- Progress Bar -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="24dp"
+        android:indeterminateTint="@color/white"
+        style="?android:attr/progressBarStyle"/>
+
+    <!-- Yükleme Metni -->
+    <TextView
+        android:id="@+id/loadingText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ürünler yükleniyor..."
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="16dp"
+        android:minHeight="24dp"/>
+
+    <!-- Alt Metin -->
+    <TextView
+        android:id="@+id/subText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="En iyi fiyatları buluyoruz"
+        android:textSize="14sp"
+        android:textColor="@color/white_alpha_70"
+        android:gravity="center"
+        android:minHeight="20dp"/>
+
+    <!-- Animasyonlu Nokta Göstergesi -->
+    <LinearLayout
+        android:id="@+id/dotLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="24dp"
+        android:gravity="center">
+
+        <View
+            android:id="@+id/dot1"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:background="@drawable/loading_dot"
+            android:layout_margin="6dp"
+            android:alpha="0.5"/>
+
+        <View
+            android:id="@+id/dot2"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:background="@drawable/loading_dot"
+            android:layout_margin="6dp"
+            android:alpha="0.5"/>
+
+        <View
+            android:id="@+id/dot3"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:background="@drawable/loading_dot"
+            android:layout_margin="6dp"
+            android:alpha="0.5"/>
+
+    </LinearLayout>
+
+    <!-- Version/Copyright Text -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Market Sepetim v1.0"
+        android:textSize="12sp"
+        android:textColor="@color/white_alpha_70"
+        android:layout_marginTop="32dp"
+        android:alpha="0.7"/>
+
+</LinearLayout>

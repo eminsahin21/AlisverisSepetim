@@ -1,29 +1,151 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F1D2D2"
-    android:padding="8dp">
+    android:orientation="vertical"
+    tools:context=".view.DetailFragment">
 
-    <AutoCompleteTextView
-        android:id="@+id/autoCompleteTextView"
+    <!-- Header - Arama ve Sepet -->
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Ürün ara..." />
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="8dp">
 
+        <!-- Arama Alanı -->
+        <EditText
+            android:id="@+id/searchEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ürün ara..."
+            android:padding="10dp"
+            android:layout_marginEnd="60dp"
+            android:background="@drawable/bg_search"
+            android:drawableStart="@android:drawable/ic_menu_search"
+            android:drawablePadding="8dp"
+            android:imeOptions="actionSearch"
+            android:inputType="text" />
+
+        <!-- Sepet Konteyner -->
+        <RelativeLayout
+            android:id="@+id/cartContainer"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true">
+
+            <!-- Sepet İkonu -->
+            <ImageView
+                android:id="@+id/cartIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_shopping_cart"
+                app:tint="@color/primary_color" />
+
+            <!-- Sepet Badge -->
+            <TextView
+                android:id="@+id/cartBadge"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignTop="@id/cartIcon"
+                android:layout_alignEnd="@id/cartIcon"
+                android:layout_marginTop="-8dp"
+                android:layout_marginEnd="-8dp"
+                android:background="@drawable/badge_background"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                tools:text="3"
+                tools:visibility="visible" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <!-- Kategori RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewCategory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:overScrollMode="never"
-        android:scrollbars="none" />
+        android:layout_marginBottom="8dp"
+        android:paddingHorizontal="16dp"
+        tools:listitem="@layout/item_category" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewProducts"
+    <!-- Ana İçerik Alanı -->
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginTop="8dp"/>
+        android:layout_weight="1">
+
+        <!-- Ürünler RecyclerView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewProducts"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp"
+            android:clipToPadding="false"
+            tools:listitem="@layout/item_product" />
+
+        <!-- Loading ProgressBar -->
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
+        <!-- Sepet Toast/Snackbar Alanı -->
+        <LinearLayout
+            android:id="@+id/cartToastCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone"
+            android:background="@drawable/bg_cart_toast"
+            android:orientation="horizontal"
+            android:padding="12dp"
+            android:gravity="center_vertical"
+            android:elevation="4dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_check_circle"
+                app:tint="@android:color/white" />
+
+            <TextView
+                android:id="@+id/cartToastText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:text="Ürün sepete eklendi"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/viewCartButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sepeti Gör"
+                android:textColor="@android:color/white"
+                android:background="@android:color/transparent"
+                android:textSize="12sp"
+                android:padding="8dp" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
 </LinearLayout>

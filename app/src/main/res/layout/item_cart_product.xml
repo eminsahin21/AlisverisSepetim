@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:gravity="center_vertical">
+
+        <!-- Market Logosu -->
+        <ImageView
+            android:id="@+id/imageCartProductLogo"
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="12dp"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/ic_placeholder" />
+
+        <!-- Ürün Bilgileri -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!-- Ürün Adı -->
+            <TextView
+                android:id="@+id/txtCartProductName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ürün Adı"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                android:maxLines="2"
+                android:ellipsize="end" />
+
+            <!-- Market Adı -->
+            <TextView
+                android:id="@+id/txtCartMarketName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Market Adı"
+                android:textSize="12sp"
+                android:textColor="@color/gray"
+                android:layout_marginTop="2dp" />
+
+            <!-- Birim Fiyat -->
+            <TextView
+                android:id="@+id/txtCartUnitPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Birim: 0.00 TL"
+                android:textSize="11sp"
+                android:textColor="@color/gray"
+                android:layout_marginTop="2dp" />
+
+        </LinearLayout>
+
+        <!-- Sağ Taraf - Miktar ve Fiyat -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <!-- Toplam Fiyat -->
+            <TextView
+                android:id="@+id/txtCartPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0.00 TL"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/primary_color"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Miktar Kontrolleri -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/quantity_background">
+
+                <!-- Azalt Butonu -->
+                <ImageView
+                    android:id="@+id/btnCartDecrease"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="6dp"
+                    android:src="@drawable/ic_remove"
+                    app:tint="@color/error_color" />
+
+                <!-- Miktar -->
+                <TextView
+                    android:id="@+id/txtCartQuantity"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:text="1"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black"
+                    android:gravity="center" />
+
+                <!-- Artır Butonu -->
+                <ImageView
+                    android:id="@+id/btnCartIncrease"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="6dp"
+                    android:src="@drawable/ic_add"
+                    app:tint="@color/primary_color" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

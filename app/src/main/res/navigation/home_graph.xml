@@ -14,28 +14,91 @@
             app:destination="@id/homeFragment" />
 
     </fragment>
+
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.alisverissepetim.view.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
+
         <action
             android:id="@+id/action_homeFragment_to_sepetDialogFragment"
             app:destination="@id/sepetDialogFragment" />
+
         <action
-            android:id="@+id/action_homeFragment_to_detailFragment"
-            app:destination="@id/detailFragment" />
+            android:id="@+id/action_homeFragment_to_loadingFragment"
+            app:destination="@id/loadingFragment">
+
+            <argument
+                android:name="sepet_adi"/>
+            <argument
+                android:name="sepet_turu"/>
+
+        </action>
+        <action
+            android:id="@+id/action_homeFragment_to_simpleListFragment"
+            app:destination="@id/simpleListFragment">
+            <argument
+            android:name="sepet_adi"/>
+            <argument
+            android:name="sepet_turu"/>
+        </action>
     </fragment>
+
+    <fragment
+        android:id="@+id/loadingFragment"
+        android:name="com.example.alisverissepetim.view.LoadingFragment"
+        android:label="LoadingFragment"
+        tools:layout="@layout/fragment_loading">
+
+        <argument
+            android:name="sepet_adi"/>
+        <argument
+            android:name="sepet_turu"/>
+
+        <action
+            android:id="@+id/action_loadingFragment_to_detailFragment"
+            app:destination="@id/detailFragment">
+            <argument
+                android:name="sepet_adi"/>
+            <argument
+                android:name="sepet_turu"/>
+        </action>
+    </fragment>
+
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.example.alisverissepetim.view.DetailFragment"
-        android:label="fragment_detail"
-        tools:layout="@layout/fragment_detail" >
+        android:label="DetailFragment"
+        tools:layout="@layout/fragment_detail">
+
         <argument
-            android:name="sepetAdi"
-            app:argType="string" />
+            android:name="sepet_adi"
+            app:argType="string"
+            android:defaultValue="" />
         <argument
-            android:name="sepetTuru"
-            app:argType="string" />
+            android:name="sepet_turu"
+            app:argType="string"
+            android:defaultValue="" />
+
+        <action
+            android:id="@+id/action_detailFragment_to_cartFragment"
+            app:destination="@id/cartFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
+
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.example.alisverissepetim.view.CartFragment"
+        android:label="Sepetim" />
+
+
+    <fragment
+        android:id="@+id/simpleListFragment"
+        android:name="com.example.alisverissepetim.view.SimpleListFragment"
+        android:label="fragment_simple_list"
+        tools:layout="@layout/fragment_simple_list" />
 </navigation>
