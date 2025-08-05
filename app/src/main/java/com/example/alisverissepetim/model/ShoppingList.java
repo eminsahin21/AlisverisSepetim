@@ -4,6 +4,15 @@ public class ShoppingList {
 
     private String basketName;
     private String basketTur;
+    private boolean hasItemsInCart;
+
+    public boolean isHasItemsInCart() {
+        return hasItemsInCart;
+    }
+
+    public void setHasItemsInCart(boolean hasItemsInCart) {
+        this.hasItemsInCart = hasItemsInCart;
+    }
 
     public String getBasketName() {
         return basketName;
@@ -24,5 +33,6 @@ public class ShoppingList {
     public ShoppingList(String basketName, String basketTur) {
         this.basketName = basketName;
         this.basketTur = basketTur;
+        this.hasItemsInCart = false;
     }
 }

@@ -8,10 +8,11 @@ import java.util.Map;
 
 public class CartManager {
     private static CartManager instance;
-    private Map<String, CartItem> cartItems;
+    // Anahtar: alışveriş listesi adı, Değer: o listeye ait sepet
+    private Map<String, Map<String, CartItem>> allCarts;
 
     private CartManager() {
-        cartItems = new HashMap<>();
+        allCarts = new HashMap<>();
     }
 
     public static CartManager getInstance() {
@@ -22,7 +23,12 @@ public class CartManager {
     }
 
     // Sepete ürün ekle
-    public void addProduct(Product product) {
+    // Yeni parametre: sepet adı
+    public void addProduct(String shoppingListName, Product product) {
+        // Sepet yoksa oluştur
+        allCarts.computeIfAbsent(shoppingListName, k -> new HashMap<>());
+        Map<String, CartItem> cartItems = allCarts.get(shoppingListName);
+
         String productKey = product.getUrun_adi() + "_" + product.getMarket_adi();
 
         if (cartItems.containsKey(productKey)) {
@@ -37,16 +43,18 @@ public class CartManager {
     }
 
     // Ürün adedini artır
-    public void increaseQuantity(String productKey) {
-        if (cartItems.containsKey(productKey)) {
+    public void increaseQuantity(String shoppingListName, String productKey) {
+        Map<String, CartItem> cartItems = allCarts.get(shoppingListName);
+        if (cartItems != null && cartItems.containsKey(productKey)) {
             CartItem item = cartItems.get(productKey);
             item.setQuantity(item.getQuantity() + 1);
         }
     }
 
     // Ürün adedini azalt
-    public void decreaseQuantity(String productKey) {
-        if (cartItems.containsKey(productKey)) {
+    public void decreaseQuantity(String shoppingListName, String productKey) {
+        Map<String, CartItem> cartItems = allCarts.get(shoppingListName);
+        if (cartItems != null && cartItems.containsKey(productKey)) {
             CartItem item = cartItems.get(productKey);
             if (item.getQuantity() > 1) {
                 item.setQuantity(item.getQuantity() - 1);
@@ -58,7 +66,11 @@ public class CartManager {
     }
 
     // Sepetteki toplam ürün sayısını getir
-    public int getTotalItemCount() {
+    public int getTotalItemCount(String shoppingListName) {
+        Map<String, CartItem> cartItems = allCarts.get(shoppingListName);
+        if (cartItems == null) {
+            return 0;
+        }
         int total = 0;
         for (CartItem item : cartItems.values()) {
             total += item.getQuantity();
@@ -67,21 +79,28 @@ public class CartManager {
     }
 
     // Sepetteki tüm ürünleri getir
-    public List<CartItem> getCartItems() {
+    public List<CartItem> getCartItems(String shoppingListName) {
+        Map<String, CartItem> cartItems = allCarts.get(shoppingListName);
+        if (cartItems == null) {
+            return new ArrayList<>();
+        }
         return new ArrayList<>(cartItems.values());
     }
 
     // Sepeti temizle
-    public void clearCart() {
-        cartItems.clear();
+    public void clearCart(String shoppingListName) {
+        if (allCarts.containsKey(shoppingListName)) {
+            allCarts.get(shoppingListName).clear();
+        }
     }
 
     // Sepet boş mu kontrol et
-    public boolean isEmpty() {
-        return cartItems.isEmpty();
+    public boolean isCartEmpty(String shoppingListName) {
+        Map<String, CartItem> cartItems = allCarts.get(shoppingListName);
+        return cartItems == null || cartItems.isEmpty();
     }
 
-    // CartItem sınıfı
+    // CartItem sınıfı (değişiklik yok)
     public static class CartItem {
         private Product product;
         private int quantity;
@@ -107,4 +126,23 @@ public class CartManager {
             return product.getUrun_adi() + "_" + product.getMarket_adi();
         }
     }
+
+    public static class ShoppingListSummary {
+        public String listName;
+        public int itemCount;
+
+        public ShoppingListSummary(String listName, int itemCount) {
+            this.listName = listName;
+            this.itemCount = itemCount;
+        }
+    }
+
+    public List<ShoppingListSummary> getAllShoppingListSummaries() {
+        List<ShoppingListSummary> summaries = new ArrayList<>();
+        for (String listName : allCarts.keySet()) {
+            summaries.add(new ShoppingListSummary(listName, getTotalItemCount(listName)));
+        }
+        return summaries;
+    }
 }
+

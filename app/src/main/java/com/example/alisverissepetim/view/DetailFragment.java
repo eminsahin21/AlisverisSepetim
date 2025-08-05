@@ -63,6 +63,8 @@ public class DetailFragment extends Fragment {
     private Handler mainHandler;
     private Handler searchHandler;
 
+    private String shoppingListName;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_detail, container, false);
@@ -75,18 +77,17 @@ public class DetailFragment extends Fragment {
         mainHandler = new Handler(Looper.getMainLooper());
         searchHandler = new Handler(Looper.getMainLooper());
 
-        // Safe Args ile gelen verileri al
+        // Safe Args ile gelen sepet adını alın
         if (getArguments() != null) {
-            String sepetAdi = DetailFragmentArgs.fromBundle(getArguments()).getSepetAdi();
-            String sepetTur = DetailFragmentArgs.fromBundle(getArguments()).getSepetTuru();
-            Log.d("DetailFragment", "Gelen sepet adı: " + sepetAdi);
-            Log.d("DetailFragment", "Gelen sepet türü: " + sepetTur);
+            DetailFragmentArgs args = DetailFragmentArgs.fromBundle(getArguments());
+            this.shoppingListName = args.getSepetAdi();
+            Log.d("DetailFragment", "Gelen sepet adı: " + shoppingListName);
         }
 
         // ProductAdapter'ı sepet callback'i ile başlat
         productAdapter = new ProductAdapter(displayedProducts, product -> {
             // Sepete ürün ekleme callback'i
-            CartManager.getInstance().addProduct(product);
+            CartManager.getInstance().addProduct(shoppingListName, product);
             updateCartBadge();
             showAddToCartToast(product.getUrun_adi());
         });
@@ -381,7 +382,7 @@ public class DetailFragment extends Fragment {
 
     // Sepet badge'ini güncelle
     private void updateCartBadge() {
-        int itemCount = CartManager.getInstance().getTotalItemCount();
+        int itemCount = CartManager.getInstance().getTotalItemCount(shoppingListName);
         if (itemCount > 0) {
             cartBadge.setVisibility(View.VISIBLE);
             cartBadge.setText(String.valueOf(itemCount));
@@ -397,15 +398,19 @@ public class DetailFragment extends Fragment {
 
     // Sepet fragmentına git
     private void navigateToCart() {
-        if (CartManager.getInstance().isEmpty()) {
+        if (CartManager.getInstance().isCartEmpty(shoppingListName)) {
             Toast.makeText(getContext(), "Sepetiniz boş", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Navigation component ile sepet fragmentına git
         try {
-            Navigation.findNavController(requireView())
-                    .navigate(R.id.action_detailFragment_to_cartFragment);
+//            Navigation.findNavController(requireView())
+//                    .navigate(R.id.action_detailFragment_to_cartFragment);
+
+            DetailFragmentDirections.ActionDetailFragmentToCartFragment action =
+                    DetailFragmentDirections.actionDetailFragmentToCartFragment(shoppingListName, ""); // İkinci parametre basketTur ise boş string göndermek yerine null veya mantıklı bir değer gönderin.
+            Navigation.findNavController(requireView()).navigate(action);
         } catch (Exception e) {
             Log.e("DetailFragment", "Navigation error: " + e.getMessage());
             Toast.makeText(getContext(), "Sepet sayfasına gidilemiyor", Toast.LENGTH_SHORT).show();

@@ -25,16 +25,18 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     private OnCartItemClickListener listener;
     private final Map<String, String> marketDisplayNames; // final yapıldı ve constructor'da initialize edilecek
     private final Context context; // Glide için context
+    private String shoppingListName = "";
 
     public interface OnCartItemClickListener {
         void onIncreaseClick(String productKey);
         void onDecreaseClick(String productKey);
     }
 
-    public CartAdapter(Context context, List<CartManager.CartItem> cartItems, OnCartItemClickListener listener) {
+    public CartAdapter(Context context, String currentShoppingListName, List<CartManager.CartItem> cartItems, OnCartItemClickListener listener) {
         this.context = context;
         this.cartItems = cartItems;
         this.listener = listener;
+        this.shoppingListName = shoppingListName;
 
         // Market isimleri için map burada, sadece bir kere oluşturulacak
         this.marketDisplayNames = new HashMap<>();

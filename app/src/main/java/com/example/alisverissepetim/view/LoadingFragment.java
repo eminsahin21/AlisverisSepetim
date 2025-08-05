@@ -26,8 +26,6 @@ import com.example.alisverissepetim.model.Product;
 import com.example.alisverissepetim.service.ApiServiceProduct;
 import com.example.alisverissepetim.service.RetrofitClient;
 
-import com.example.alisverissepetim.BuildConfig;
-
 import java.util.List;
 
 import kotlinx.coroutines.Job;
@@ -48,8 +46,8 @@ public class LoadingFragment extends Fragment {
 
     String sepetAdi;
     String sepetTuru;
-    //BuildConfig Düzeltilecek
-    private static final String BASE_URL = BuildConfig.BASE_URL;
+
+    private static final String BASE_URL = "https://my-market-api-w9i3.onrender.com/";
 
     // Yüklenen veriler
     private List<Product> loadedProducts;
