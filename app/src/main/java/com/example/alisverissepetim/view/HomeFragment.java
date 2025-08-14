@@ -13,13 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.example.alisverissepetim.R;
 import com.example.alisverissepetim.adapter.RecyclerviewAdapter;
 import com.example.alisverissepetim.model.ShoppingList;
-// CartManager importu gerekebilir, adapter içinde kullanılıyor ama fragment'ta direkt gerekirse diye
-// import com.example.alisverissepetim.manager.CartManager;
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment implements RecyclerviewAdapter.OnItemClickListener {
@@ -27,16 +26,16 @@ public class HomeFragment extends Fragment implements RecyclerviewAdapter.OnItem
     RecyclerView recyclerView;
     RecyclerviewAdapter recyclerviewAdapter;
     ArrayList<ShoppingList> currentShoppingLists = new ArrayList<>();
+    TextView emptyStateTextView;
+    Button buttonNewList, buttonViewLists;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
@@ -44,9 +43,22 @@ public class HomeFragment extends Fragment implements RecyclerviewAdapter.OnItem
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        recyclerView = view.findViewById(R.id.recyclerView_home);
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        initViews(view);
+        setupRecyclerView();
+        setupFragmentResultListener();
+        setupClickListeners();
+        updateEmptyState();
+    }
 
+    private void initViews(View view) {
+        recyclerView = view.findViewById(R.id.recyclerView_home);
+        emptyStateTextView = view.findViewById(R.id.textView_empty_state);
+        buttonNewList = view.findViewById(R.id.button_newList_in_card);
+        buttonViewLists = view.findViewById(R.id.button_viewLists_outside_card);
+    }
+
+    private void setupRecyclerView() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerviewAdapter = new RecyclerviewAdapter(currentShoppingLists);
         recyclerviewAdapter.setOnItemClickListener(this);
         recyclerView.setAdapter(recyclerviewAdapter);
@@ -58,8 +70,9 @@ public class HomeFragment extends Fragment implements RecyclerviewAdapter.OnItem
             );
             recyclerView.scheduleLayoutAnimation();
         }
+    }
 
-
+    private void setupFragmentResultListener() {
         // FragmentResultListener ile SepetDialogFragment'tan gelen veriyi al
         getParentFragmentManager().setFragmentResultListener("sepetKey", this, (requestKey, bundle) -> {
             String sepetAdi = bundle.getString("sepetAdi");
@@ -68,25 +81,49 @@ public class HomeFragment extends Fragment implements RecyclerviewAdapter.OnItem
             if (sepetAdi != null && !sepetAdi.isEmpty()) {
                 ShoppingList newSepet = new ShoppingList(sepetAdi, sepetTur);
                 recyclerviewAdapter.addItem(newSepet);
+                updateEmptyState();
                 Log.d("HomeFragment", "Sepet eklendi: " + newSepet.getBasketName() + " - " + newSepet.getBasketTur());
             } else {
                 Toast.makeText(getContext(), "Sepet adı boş olamaz!", Toast.LENGTH_SHORT).show();
             }
-            Log.d("HomeFragment", "Gelen sepet: " + sepetAdi+ ", Tür: " + sepetTur);
+            Log.d("HomeFragment", "Gelen sepet: " + sepetAdi + ", Tür: " + sepetTur);
         });
+    }
 
-        ImageView sepetOlusturButton = view.findViewById(R.id.sepet_olustur_button);
-        sepetOlusturButton.setOnClickListener(v -> {
+    private void setupClickListeners() {
+        // Yeni Liste Oluştur butonu
+        buttonNewList.setOnClickListener(v -> {
             SepetDialogFragment sepetDialog = new SepetDialogFragment();
             sepetDialog.show(getParentFragmentManager(), "SepetDialog");
         });
+
+        // Mevcut Listelerim butonu - Aynı sayfada RecyclerView'a odaklan
+        buttonViewLists.setOnClickListener(v -> {
+            if (currentShoppingLists.isEmpty()) {
+                Toast.makeText(getContext(), "Henüz hiç liste oluşturmadınız!", Toast.LENGTH_SHORT).show();
+            } else {
+                // RecyclerView'a scroll yap
+                recyclerView.smoothScrollToPosition(0);
+                Toast.makeText(getContext(), "Alışveriş listeleriniz aşağıda görüntüleniyor", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void updateEmptyState() {
+        if (currentShoppingLists.isEmpty()) {
+            emptyStateTextView.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            emptyStateTextView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
     // Adapter'dan gelen normal tıklama
     @Override
     public void onItemClick(ShoppingList sepet) {
         // String karşılaştırmalarını .equals() ile yapın
-        if ("Markalı".equals(sepet.getBasketTur())){ // NULL POINTER EXCEPTION ÖNLEMEK İÇİN "Markalı".equals(...)
+        if ("Markalı".equals(sepet.getBasketTur())) { // NULL POINTER EXCEPTION ÖNLEMEK İÇİN "Markalı".equals(...)
             goToLoadingFragment(getView(), sepet); // getView() kullanmak daha güvenli olabilir
         } else {
             goToSimpleListFragment(getView(), sepet);
@@ -133,6 +170,7 @@ public class HomeFragment extends Fragment implements RecyclerviewAdapter.OnItem
         super.onResume();
         if (recyclerviewAdapter != null) {
             recyclerviewAdapter.notifyDataSetChanged();
+            updateEmptyState();
         }
     }
 }

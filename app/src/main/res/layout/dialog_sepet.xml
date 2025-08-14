@@ -1,79 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="280dp"
-    android:layout_height="350dp"
-    android:padding="20dp"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="320dp"
+    android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:elevation="10dp"
-    android:background="@drawable/dialog_background"
-    android:orientation="vertical">
-
+    app:cardCornerRadius="16dp"
+    app:cardElevation="12dp"
+    android:layout_margin="24dp">
 
     <LinearLayout
-        android:layout_width="200dp"
-        android:layout_height="300dp"
-        android:layout_gravity="center"
-        android:orientation="vertical">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
 
+        <!-- Başlık -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="20dp">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/fruit_basket"
+                android:layout_marginEnd="12dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Yeni Sepet Oluştur"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <!-- Sepet Adı Input -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/sepetNameDialog"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Sepetinizi isimlendirin..."
+                android:inputType="text"
+                android:textSize="16sp"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Sepet Türü Seçimi -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingBottom="10dp"
-            android:layout_marginBottom="10dp"
-            android:text="Sepetim"
+            android:text="Sepet Türü"
             android:textColor="@color/black"
-            android:textSize="22sp"
-            android:textStyle="bold" />
-
-
-        <EditText
-            android:id="@+id/sepetNameDialog"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:textSize="14sp"
-            android:elevation="10dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/rounded_inputs"
-            android:hint="Sepetinizi isimlendirin..."
-            android:inputType="text" />
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:gravity="center">
+            android:orientation="horizontal"
+            android:layout_marginBottom="24dp"
+            android:gravity="center"
+            android:weightSum="2">
 
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/markali_markasiz_button_bg"
-            android:text="Markalı Liste"
-            android:textColor="@color/green"
-            />
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                app:strokeWidth="2dp"
+                app:strokeColor="#E0E0E0">
 
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            android:layout_marginLeft="5dp"
-            android:background="@drawable/markali_markasiz_button_bg"
-            android:text="Markasız Liste"
-            android:textColor="@color/green" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <Button
+                        android:id="@+id/button1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Markalı\nListe"
+                        android:textColor="#6200EE"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:background="@android:color/transparent"
+                        android:gravity="center" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                app:strokeWidth="2dp"
+                app:strokeColor="#E0E0E0">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <Button
+                        android:id="@+id/button2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Markasız\nListe"
+                        android:textColor="#6200EE"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:background="@android:color/transparent"
+                        android:gravity="center" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/make_basket"
+        <!-- Butonlar -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textColor="@color/white"
-            android:background="@drawable/mybutton"
-            android:text="Sepet Oluştur" />
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/button_cancel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:text="İptal"
+                android:background="#F2F2F2"
+                android:textColor="#6200EE" />
+
+            <Button
+                android:id="@+id/make_basket"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="Sepet Oluştur"
+                android:textColor="@color/white"
+                app:backgroundTint="#6200EE" />
+
+        </LinearLayout>
 
     </LinearLayout>
-</LinearLayout>
+
+</androidx.cardview.widget.CardView>

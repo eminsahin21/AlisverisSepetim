@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
         NavController navController = navHostFragment.getNavController();
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            if (destination.getId() == R.id.loginFragment || destination.getId() == R.id.signUpFragment) {
+            if (getSupportActionBar() != null) {
                 getSupportActionBar().hide();
             } else {
                 getSupportActionBar().show();
