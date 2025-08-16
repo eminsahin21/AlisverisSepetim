@@ -13,12 +13,14 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.material.card.MaterialCardView;
 
 public class SepetDialogFragment extends DialogFragment {
 
-    private Button button1, button2, sepetListelemeButon, buttonCancel;
+    private TextView button1, button2; // TextView olarak değiştirildi
+    private Button sepetListelemeButon, buttonCancel;
     private EditText inputSepetName;
     private MaterialCardView cardView1, cardView2;
 
@@ -47,7 +49,7 @@ public class SepetDialogFragment extends DialogFragment {
         if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
             WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
-            params.dimAmount = 0.6f;  // Arka planın ne kadar soluk olacağını ayarla (0.0 - 1.0)
+            params.dimAmount = 0.6f;
             dialog.getWindow().setAttributes(params);
         }
 
@@ -58,19 +60,20 @@ public class SepetDialogFragment extends DialogFragment {
     }
 
     private void initViews(View view) {
-        button1 = view.findViewById(R.id.button1);
-        button2 = view.findViewById(R.id.button2);
+        button1 = view.findViewById(R.id.button1); // TextView olarak bulunuyor
+        button2 = view.findViewById(R.id.button2); // TextView olarak bulunuyor
         sepetListelemeButon = view.findViewById(R.id.make_basket);
         buttonCancel = view.findViewById(R.id.button_cancel);
         inputSepetName = view.findViewById(R.id.sepetNameDialog);
 
-        // CardView'ları bul (eğer layout'ta varsa)
+        // CardView'ları bul
         cardView1 = (MaterialCardView) button1.getParent().getParent();
         cardView2 = (MaterialCardView) button2.getParent().getParent();
     }
 
     private void setupClickListeners() {
-        button1.setOnClickListener(new View.OnClickListener() {
+        // CardView'lara click listener ekle
+        cardView1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 flagForButtonControl = 1;
@@ -78,7 +81,7 @@ public class SepetDialogFragment extends DialogFragment {
             }
         });
 
-        button2.setOnClickListener(new View.OnClickListener() {
+        cardView2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 flagForButtonControl = 2;
@@ -87,7 +90,7 @@ public class SepetDialogFragment extends DialogFragment {
         });
 
         buttonCancel.setOnClickListener(v -> {
-            dismiss(); // Dialog'u kapat
+            dismiss();
         });
 
         sepetListelemeButon.setOnClickListener(v -> {
@@ -95,7 +98,7 @@ public class SepetDialogFragment extends DialogFragment {
 
             if (sepetAdi.isEmpty()) {
                 Toast.makeText(getContext(), "Sepet adı boş olamaz!", Toast.LENGTH_SHORT).show();
-                return; // Dialog kapanmasın
+                return;
             }
 
             if (flagForButtonControl == 1) {
@@ -103,30 +106,26 @@ public class SepetDialogFragment extends DialogFragment {
             } else if (flagForButtonControl == 2) {
                 sepetTur = "Markasız";
             } else {
-                // Hiçbiri seçilmemişse varsayılan olarak Markasız yap
                 sepetTur = "Markasız";
                 Toast.makeText(getContext(), "Sepet türü otomatik olarak 'Markasız' seçildi.", Toast.LENGTH_SHORT).show();
             }
 
-            // Veriyi HomeFragment'a göndermek için bundle oluştur
             Bundle result = new Bundle();
             result.putString("sepetAdi", sepetAdi);
             result.putString("sepetTur", sepetTur);
 
-            // HomeFragment'a sonucu ilet
             getParentFragmentManager().setFragmentResult("sepetKey", result);
             System.out.println("SepetDialog tetiklendi: " + sepetAdi + " - " + sepetTur);
 
-            // Dialog'u kapat
             dismiss();
         });
     }
 
     private void changeButtonState(MaterialCardView activeCard, MaterialCardView inactiveCard,
-                                   Button activeButton, Button inactiveButton) {
+                                   TextView activeButton, TextView inactiveButton) {
         // Aktif kartı vurgula
         activeCard.setStrokeColor(getResources().getColor(R.color.green, null));
-        activeCard.setStrokeWidth(4);
+        activeCard.setStrokeWidth(6);
         activeCard.setCardElevation(8f);
         activeButton.setTextColor(getResources().getColor(R.color.green, null));
 

@@ -39,13 +39,23 @@
             android:id="@+id/action_homeFragment_to_simpleListFragment"
             app:destination="@id/simpleListFragment">
             <argument
-            android:name="sepet_adi"/>
+                android:name="sepet_adi"/>
             <argument
-            android:name="sepet_turu"/>
+                android:name="sepet_turu"/>
         </action>
         <action
             android:id="@+id/action_homeFragment_to_cartFragment"
             app:destination="@id/cartFragment" />
+
+        <!-- DetailFragment'a direkt geçiş için yeni action -->
+        <action
+            android:id="@+id/action_homeFragment_to_detailFragment"
+            app:destination="@id/detailFragment">
+            <argument
+                android:name="sepet_adi"/>
+            <argument
+                android:name="sepet_turu"/>
+        </action>
     </fragment>
 
     <fragment
@@ -59,9 +69,12 @@
         <argument
             android:name="sepet_turu"/>
 
+        <!-- LoadingFragment'tan DetailFragment'a geçiş, ama popUpTo ile HomeFragment'a dönüş sağlıyoruz -->
         <action
             android:id="@+id/action_loadingFragment_to_detailFragment"
-            app:destination="@id/detailFragment">
+            app:destination="@id/detailFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="false">
             <argument
                 android:name="sepet_adi"/>
             <argument
@@ -108,7 +121,6 @@
             app:argType="string"/>
 
     </fragment>
-
 
     <fragment
         android:id="@+id/simpleListFragment"

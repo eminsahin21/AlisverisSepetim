@@ -5,6 +5,10 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
+import android.graphics.Color;
+import android.graphics.Outline;
+import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -12,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -117,17 +122,39 @@ public class LoadingFragment extends Fragment {
 
     private void startLogoAnimation() {
         if (logoImageView != null) {
-            // Logo'ya smooth rotate + scale animasyonu
-            PropertyValuesHolder rotateHolder = PropertyValuesHolder.ofFloat("rotation", 0f, 360f);
-            PropertyValuesHolder scaleXHolder = PropertyValuesHolder.ofFloat("scaleX", 1f, 1.1f, 1f);
-            PropertyValuesHolder scaleYHolder = PropertyValuesHolder.ofFloat("scaleY", 1f, 1.1f, 1f);
+            // Yuvarlak yap
+            makeImageViewCircular(logoImageView);
 
-            rotationAnimator = ObjectAnimator.ofPropertyValuesHolder(logoImageView,
-                    rotateHolder, scaleXHolder, scaleYHolder);
-            rotationAnimator.setDuration(3000);
+            // Sadece scale animasyonu (rotation kaldırıldı)
+            PropertyValuesHolder scaleXHolder = PropertyValuesHolder.ofFloat("scaleX", 1f, 1.3f, 1f);
+            PropertyValuesHolder scaleYHolder = PropertyValuesHolder.ofFloat("scaleY", 1f, 1.3f, 1f);
+
+            rotationAnimator = ObjectAnimator.ofPropertyValuesHolder(logoImageView, scaleXHolder, scaleYHolder);
+            rotationAnimator.setDuration(2000);
             rotationAnimator.setRepeatCount(ObjectAnimator.INFINITE);
             rotationAnimator.setRepeatMode(ObjectAnimator.RESTART);
             rotationAnimator.start();
+        }
+    }
+
+    // ImageView'ı yuvarlak yapan yardımcı metod
+    private void makeImageViewCircular(ImageView imageView) {
+        // Yuvarlak şekil için outline provider
+        imageView.setOutlineProvider(new ViewOutlineProvider() {
+            @Override
+            public void getOutline(View view, Outline outline) {
+                int size = Math.min(view.getWidth(), view.getHeight());
+                outline.setOval(0, 0, size, size);
+            }
+        });
+        imageView.setClipToOutline(true);
+
+        // Alternatif: Programatik olarak yuvarlak background
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            GradientDrawable shape = new GradientDrawable();
+            shape.setShape(GradientDrawable.OVAL);
+            shape.setColor(Color.TRANSPARENT);
+            imageView.setBackground(shape);
         }
     }
 
