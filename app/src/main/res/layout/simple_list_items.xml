@@ -16,13 +16,6 @@
         android:padding="16dp"
         android:gravity="center_vertical">
 
-        <!-- Ürün İkonu -->
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_shopping_cart"
-            android:layout_marginEnd="12dp"
-            app:tint="#3498db" />
 
         <!-- Ürün Adı -->
         <TextView

@@ -167,30 +167,6 @@ public class CartFragment extends Fragment {
             double totalPrice = calculateTotalPrice(cartItems);
             txtTotalPrice.setText("Toplam: " + String.format("%.2f", totalPrice) + " TL");
         }
-
-//        if (cartItems.isEmpty()) {
-//            // Sepet boş
-//            recyclerViewCart.setVisibility(View.GONE);
-//            txtEmptyCart.setVisibility(View.VISIBLE);
-//            btnCheckout.setVisibility(View.GONE);
-//            btnClearCart.setVisibility(View.GONE);
-//            txtTotalPrice.setVisibility(View.GONE);
-//        } else {
-//            // Sepet dolu
-//            recyclerViewCart.setVisibility(View.VISIBLE);
-//            txtEmptyCart.setVisibility(View.GONE);
-//            btnCheckout.setVisibility(View.VISIBLE);
-//            btnClearCart.setVisibility(View.VISIBLE);
-//            txtTotalPrice.setVisibility(View.VISIBLE);
-//
-//            // Adapter'ı güncelle
-//            cartAdapter.updateCartItems(cartItems);
-//
-//            // Toplam fiyatı hesapla
-//            double totalPrice = calculateTotalPrice(cartItems);
-//            System.out.println("Toplam: " + String.format("%.2f", totalPrice) + " TL");
-//            txtTotalPrice.setText("Toplam: " + String.format("%.2f", totalPrice) + " TL");
-//        }
     }
 
     private double calculateTotalPrice(List<CartManager.CartItem> cartItems) {

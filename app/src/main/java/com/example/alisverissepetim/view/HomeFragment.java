@@ -19,7 +19,9 @@ import android.widget.Toast;
 import com.example.alisverissepetim.R;
 import com.example.alisverissepetim.adapter.RecyclerviewAdapter;
 import com.example.alisverissepetim.model.ShoppingList;
+import com.example.alisverissepetim.utils.SharedPreferencesHelper;
 import java.util.ArrayList;
+import java.util.List;
 
 public class HomeFragment extends Fragment implements RecyclerviewAdapter.OnItemClickListener {
 
@@ -29,9 +31,14 @@ public class HomeFragment extends Fragment implements RecyclerviewAdapter.OnItem
     TextView emptyStateTextView;
     Button buttonNewList, buttonViewLists;
 
+    // SharedPreferences helper
+    private SharedPreferencesHelper shoppingListPreferences;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // SharedPreferences helper'ı başlat
+        shoppingListPreferences = new SharedPreferencesHelper(requireContext());
     }
 
     @Override
@@ -44,6 +51,7 @@ public class HomeFragment extends Fragment implements RecyclerviewAdapter.OnItem
         super.onViewCreated(view, savedInstanceState);
 
         initViews(view);
+        loadSavedShoppingLists(); // Kaydedilmiş listeleri yükle
         setupRecyclerView();
         setupFragmentResultListener();
         setupClickListeners();
@@ -55,6 +63,39 @@ public class HomeFragment extends Fragment implements RecyclerviewAdapter.OnItem
         emptyStateTextView = view.findViewById(R.id.textView_empty_state);
         buttonNewList = view.findViewById(R.id.button_newList_in_card);
         buttonViewLists = view.findViewById(R.id.button_viewLists_outside_card);
+    }
+
+    /**
+     * Kaydedilmiş alışveriş listelerini yükle
+     */
+    private void loadSavedShoppingLists() {
+        try {
+            List<ShoppingList> savedLists = shoppingListPreferences.loadShoppingLists();
+            currentShoppingLists.clear();
+            currentShoppingLists.addAll(savedLists);
+
+            Log.d("HomeFragment", "Kaydedilmiş " + savedLists.size() + " liste yüklendi");
+
+            if (savedLists.size() > 0) {
+                Toast.makeText(getContext(), savedLists.size() + " kaydedilmiş liste yüklendi",
+                        Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Log.e("HomeFragment", "Listeleri yüklerken hata: " + e.getMessage());
+            Toast.makeText(getContext(), "Kaydedilmiş listeler yüklenemedi", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Mevcut listeleri SharedPreferences'a kaydet
+     */
+    private void saveShoppingLists() {
+        try {
+            shoppingListPreferences.saveShoppingLists(currentShoppingLists);
+            Log.d("HomeFragment", "Tüm listeler kaydedildi. Liste sayısı: " + currentShoppingLists.size());
+        } catch (Exception e) {
+            Log.e("HomeFragment", "Listeler kaydedilirken hata: " + e.getMessage());
+        }
     }
 
     private void setupRecyclerView() {
@@ -79,13 +120,31 @@ public class HomeFragment extends Fragment implements RecyclerviewAdapter.OnItem
             String sepetTur = bundle.getString("sepetTur");
 
             if (sepetAdi != null && !sepetAdi.isEmpty()) {
+                // Aynı isimde liste var mı kontrol et
+                if (shoppingListPreferences.isShoppingListExists(sepetAdi)) {
+                    Toast.makeText(getContext(), "Bu isimde bir liste zaten var!", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 ShoppingList newSepet = new ShoppingList(sepetAdi, sepetTur);
+
+                // RecyclerView'a ekle
                 recyclerviewAdapter.addItem(newSepet);
+
+                // SharedPreferences'a kaydet
+                shoppingListPreferences.addShoppingList(newSepet);
+
                 updateEmptyState();
-                Log.d("HomeFragment", "Sepet eklendi: " + newSepet.getBasketName() + " - " + newSepet.getBasketTur());
+
+                Log.d("HomeFragment", "Sepet eklendi ve kaydedildi: " + newSepet.getBasketName() +
+                        " - " + newSepet.getBasketTur());
+
+                Toast.makeText(getContext(), sepetAdi + " listesi oluşturuldu ve kaydedildi!",
+                        Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getContext(), "Sepet adı boş olamaz!", Toast.LENGTH_SHORT).show();
             }
+
             Log.d("HomeFragment", "Gelen sepet: " + sepetAdi + ", Tür: " + sepetTur);
         });
     }
@@ -104,7 +163,8 @@ public class HomeFragment extends Fragment implements RecyclerviewAdapter.OnItem
             } else {
                 // RecyclerView'a scroll yap
                 recyclerView.smoothScrollToPosition(0);
-                Toast.makeText(getContext(), "Alışveriş listeleriniz aşağıda görüntüleniyor", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Alışveriş listeleriniz aşağıda görüntüleniyor",
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -137,8 +197,56 @@ public class HomeFragment extends Fragment implements RecyclerviewAdapter.OnItem
         goToCartFragment(getView(), sepet.getBasketName());
     }
 
+    /**
+     * Liste silme işlemi - Adapter'dan çağrılabilir
+     */
+    public void deleteShoppingList(ShoppingList shoppingList) {
+        try {
+            // SharedPreferences'tan sil
+            boolean removed = shoppingListPreferences.removeShoppingList(shoppingList.getBasketName());
+
+            if (removed) {
+                // RecyclerView'dan sil
+                int position = currentShoppingLists.indexOf(shoppingList);
+                if (position != -1) {
+                    currentShoppingLists.remove(position);
+                    recyclerviewAdapter.notifyItemRemoved(position);
+                    updateEmptyState();
+
+                    Toast.makeText(getContext(), shoppingList.getBasketName() + " listesi silindi",
+                            Toast.LENGTH_SHORT).show();
+
+                    Log.d("HomeFragment", "Liste silindi: " + shoppingList.getBasketName());
+                }
+            } else {
+                Toast.makeText(getContext(), "Liste silinemedi", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Log.e("HomeFragment", "Liste silinirken hata: " + e.getMessage());
+            Toast.makeText(getContext(), "Liste silinirken hata oluştu", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Tüm listeleri temizle
+     */
+    public void clearAllShoppingLists() {
+        try {
+            shoppingListPreferences.clearAllShoppingLists();
+            currentShoppingLists.clear();
+            recyclerviewAdapter.notifyDataSetChanged();
+            updateEmptyState();
+
+            Toast.makeText(getContext(), "Tüm listeler temizlendi", Toast.LENGTH_SHORT).show();
+            Log.d("HomeFragment", "Tüm listeler temizlendi");
+        } catch (Exception e) {
+            Log.e("HomeFragment", "Listeler temizlenirken hata: " + e.getMessage());
+        }
+    }
+
     private void goToSimpleListFragment(View view, ShoppingList sepet) {
         if (view == null) return; // View null ise işlem yapma
+
         // HomeFragment'tan SimpleListFragment'a yönlendirme
         NavDirections action = HomeFragmentDirections
                 .actionHomeFragmentToSimpleListFragment(sepet.getBasketName(), sepet.getBasketTur());
@@ -147,6 +255,7 @@ public class HomeFragment extends Fragment implements RecyclerviewAdapter.OnItem
 
     private void goToLoadingFragment(View view, ShoppingList sepet) {
         if (view == null) return;
+
         // HomeFragment'tan LoadingFragment'a yönlendirme
         NavDirections action = HomeFragmentDirections
                 .actionHomeFragmentToLoadingFragment(sepet.getBasketName(), sepet.getBasketTur());
@@ -155,6 +264,7 @@ public class HomeFragment extends Fragment implements RecyclerviewAdapter.OnItem
 
     private void goToCartFragment(View view, String shoppingListName) {
         if (view == null) return;
+
         try {
             HomeFragmentDirections.ActionHomeFragmentToCartFragment action =
                     HomeFragmentDirections.actionHomeFragmentToCartFragment(shoppingListName, ""); // basketTur için boş string veya null
@@ -172,5 +282,25 @@ public class HomeFragment extends Fragment implements RecyclerviewAdapter.OnItem
             recyclerviewAdapter.notifyDataSetChanged();
             updateEmptyState();
         }
+
+        // Fragment'a geri dönüldüğünde verileri tekrar yükle
+        loadSavedShoppingLists();
+        if (recyclerviewAdapter != null) {
+            recyclerviewAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Fragment'tan çıkarken listeleri kaydet
+        saveShoppingLists();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // Fragment yok edilirken son kez kaydet
+        saveShoppingLists();
     }
 }

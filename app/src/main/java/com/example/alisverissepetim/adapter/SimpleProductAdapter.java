@@ -1,9 +1,9 @@
 package com.example.alisverissepetim.adapter;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -49,8 +49,8 @@ public class SimpleProductAdapter extends RecyclerView.Adapter<SimpleProductAdap
     static class ProductViewHolder extends RecyclerView.ViewHolder {
         private TextView productNameTextView;
         private TextView quantityTextView;
-        private Button decreaseButton;
-        private Button increaseButton;
+        private ImageButton decreaseButton; // ImageButton olarak değiştirdim
+        private ImageButton increaseButton; // ImageButton olarak değiştirdim
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -69,7 +69,6 @@ public class SimpleProductAdapter extends RecyclerView.Adapter<SimpleProductAdap
                 if (position != RecyclerView.NO_POSITION && listener != null) {
                     listener.onIncreaseClick(position);
                 }
-
             });
 
             decreaseButton.setOnClickListener(v -> {

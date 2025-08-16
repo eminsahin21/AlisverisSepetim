@@ -6,24 +6,30 @@
     android:padding="16dp"
     android:background="#f8f9fa">
 
-    <!-- Arama EditText -->
-    <androidx.appcompat.widget.SearchView
+    <!-- Arama EditText - SearchView'dan çıkardım -->
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:hint="Ürün eklemek için yazın...">
+        app:cardCornerRadius="12dp"
+        app:cardElevation="2dp"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
         <EditText
             android:id="@+id/searchSimpleEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="Ürün eklemek için yazın ve Enter'a basın..."
             android:imeOptions="actionSearch"
             android:inputType="text"
             android:maxLines="1"
-            android:padding="12dp"
-            android:textSize="16sp" />
+            android:padding="16dp"
+            android:textSize="16sp"
+            android:background="@android:color/transparent"
+            android:drawableStart="@android:drawable/ic_menu_search"
+            android:drawablePadding="12dp" />
 
-    </androidx.appcompat.widget.SearchView>
+    </androidx.cardview.widget.CardView>
 
     <!-- Ürün Listesi Başlığı -->
     <TextView
