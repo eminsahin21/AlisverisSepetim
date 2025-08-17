@@ -6,17 +6,20 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.alisverissepetim.R;
 import com.example.alisverissepetim.model.Product;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
 
     private ArrayList<Product> productList;
     private OnProductClickListener onProductClickListener;
+    private List<Product> products;
 
     // Interface for button clicks
     public interface OnProductClickListener {
@@ -32,6 +35,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     public ProductAdapter(ArrayList<Product> productList) {
         this.productList = productList;
         this.onProductClickListener = null;
+    }
+
+    // DiffUtil ile performanslı güncelleme
+    public void updateList(List<Product> newProducts) {
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new ProductDiffCallback(this.products, newProducts));
+        this.products.clear();
+        this.products.addAll(newProducts);
+        diffResult.dispatchUpdatesTo(this);
     }
 
     @NonNull
@@ -174,6 +185,54 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             imageProduct = itemView.findViewById(R.id.imageProduct);
             imageMarketLogo = itemView.findViewById(R.id.imageMarketLogo);
             btnAdd = itemView.findViewById(R.id.btnAdd);
+        }
+    }
+
+    // DiffUtil Callback sınıfı
+    private static class ProductDiffCallback extends DiffUtil.Callback {
+        private List<Product> oldList;
+        private List<Product> newList;
+
+        public ProductDiffCallback(List<Product> oldList, List<Product> newList) {
+            this.oldList = oldList;
+            this.newList = newList;
+        }
+
+        @Override
+        public int getOldListSize() {
+            return oldList.size();
+        }
+
+        @Override
+        public int getNewListSize() {
+            return newList.size();
+        }
+
+        @Override
+        public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+            Product oldProduct = oldList.get(oldItemPosition);
+            Product newProduct = newList.get(newItemPosition);
+
+            // ID varsa ID'ye göre, yoksa ürün adı + market kombinasyonuna göre karşılaştır
+            if (oldProduct.getId() != null && newProduct.getId() != null) {
+                return oldProduct.getId().equals(newProduct.getId());
+            } else {
+                // Alternatif: ürün adı + market adı kombinasyonu
+                String oldKey = (oldProduct.getUrun_adi() != null ? oldProduct.getUrun_adi() : "") + "_" +
+                        (oldProduct.getMarket_adi() != null ? oldProduct.getMarket_adi() : "");
+                String newKey = (newProduct.getUrun_adi() != null ? newProduct.getUrun_adi() : "") + "_" +
+                        (newProduct.getMarket_adi() != null ? newProduct.getMarket_adi() : "");
+                return oldKey.equals(newKey);
+            }
+        }
+
+        @Override
+        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+            Product oldProduct = oldList.get(oldItemPosition);
+            Product newProduct = newList.get(newItemPosition);
+
+            // İçerik karşılaştırması
+            return oldProduct.equals(newProduct); // Product sınıfında equals() methodunu override etmelisiniz
         }
     }
 }

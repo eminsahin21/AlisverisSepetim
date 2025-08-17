@@ -1,7 +1,9 @@
 package com.example.alisverissepetim.model;
 
+import java.util.Objects;
+
 public class Product {
-    private int id;
+    private String id;
     private String urun_adi;
     private String fiyat;
     private String market_adi;
@@ -15,7 +17,7 @@ public class Product {
 
     }
 
-    public Product(int id, String urun_adi, String fiyat, String market_adi, String market_logo, String urun_gorsel, String kategori,int quantity) {
+    public Product(String id, String urun_adi, String fiyat, String market_adi, String market_logo, String urun_gorsel, String kategori,int quantity) {
         this.id = id;
         this.urun_adi = urun_adi;
         this.fiyat = fiyat;
@@ -27,7 +29,14 @@ public class Product {
 
     }
 
-    public int getId() {
+    public String getId() {
+        // Eğer id field'ı yoksa, benzersiz bir identifier oluşturun
+        if (id == null || id.isEmpty()) {
+            // Ürün adı + market adı + fiyat kombinasyonu ile benzersiz ID
+            return (urun_adi != null ? urun_adi : "") + "_" +
+                    (market_adi != null ? market_adi : "") + "_" +
+                    (fiyat != null ? fiyat : "");
+        }
         return id;
     }
 
@@ -61,5 +70,38 @@ public class Product {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    // equals() metodunu override edin - DiffUtil için gerekli
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Product product = (Product) o;
+
+        return Objects.equals(getId(), product.getId()) &&
+                Objects.equals(urun_adi, product.urun_adi) &&
+                Objects.equals(fiyat, product.fiyat) &&
+                Objects.equals(market_adi, product.market_adi) &&
+                Objects.equals(kategori, product.kategori);
+    }
+
+    // hashCode() metodunu da override edin
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), urun_adi, fiyat, market_adi, kategori);
+    }
+
+    // toString() metodu - debug için yararlı
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id='" + getId() + '\'' +
+                ", urun_adi='" + urun_adi + '\'' +
+                ", fiyat='" + fiyat + '\'' +
+                ", market_adi='" + market_adi + '\'' +
+                ", kategori='" + kategori + '\'' +
+                '}';
     }
 }
