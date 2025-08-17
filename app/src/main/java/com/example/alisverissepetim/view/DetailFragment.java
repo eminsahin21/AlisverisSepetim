@@ -227,7 +227,6 @@ public class DetailFragment extends Fragment {
 
     private void setupCategoriesFromProducts(List<Product> products) {
         Set<String> uniqueCategories = new HashSet<>();
-        uniqueCategories.add("Tümü");
 
         for (Product product : products) {
             if (product.getKategori() != null && !product.getKategori().isEmpty()) {
@@ -236,12 +235,21 @@ public class DetailFragment extends Fragment {
         }
 
         categoryList.clear();
-        categoryList.addAll(uniqueCategories);
+        categoryList.add("Tümü");
+        for (String originalCategory : uniqueCategories) {
+            categoryList.add(originalCategory);
+        }
 
-        // Kategori isimlerini güzelleştir
+        // Kategori isimlerini güzelleştirme
         beautifyCategoryNames();
 
         categoryAdapter.notifyDataSetChanged();
+
+        if (categoryAdapter != null) {
+            categoryAdapter.notifyDataSetChanged();
+        } else {
+            Log.w("DetailFragment", "categoryAdapter is null in setupCategoriesFromProducts");
+        }
 
         Log.d("CATEGORIES", "Kategori sayısı: " + categoryList.size());
     }
