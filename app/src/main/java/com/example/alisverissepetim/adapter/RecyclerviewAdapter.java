@@ -3,6 +3,7 @@ package com.example.alisverissepetim.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton; // Eklendi
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -20,7 +21,7 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
 
     public interface OnItemClickListener {
         void onItemClick(ShoppingList sepet);
-        void onCartIconClick(ShoppingList sepet); // YENİ METOD
+        void onCartIconClick(ShoppingList sepet);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -93,13 +94,13 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
 
     public static class RowHolder extends RecyclerView.ViewHolder {
         TextView sepetAdi, sepetTur;
-        ImageButton btnGoToCart; // Eklendi
+        Button btnGoToCart; // Eklendi
 
         public RowHolder(RecyclerRowBinding recyclerRowBinding) {
             super(recyclerRowBinding.getRoot());
             sepetAdi = recyclerRowBinding.txtSepetAdi;
             sepetTur = recyclerRowBinding.txtSepetTur;
-            btnGoToCart = recyclerRowBinding.btnGoToCart; // Bağlandı
+            btnGoToCart = recyclerRowBinding.btnGoToCart;
         }
     }
 }

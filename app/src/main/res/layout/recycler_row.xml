@@ -37,17 +37,17 @@
         android:visibility="visible"
         android:text="Sepet Türü" />
 
-    <ImageButton
+    <Button
         android:id="@+id/btnGoToCart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
         android:padding="6dp"
-        android:background="@color/price_color"
-        android:backgroundTint="@color/white"
-        android:contentDescription="Sepete Git"
-        android:src="@drawable/ic_shopping_cart"
+        android:textColor="@color/white"
+        android:text="Listem"
+        android:background="#FF7146"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

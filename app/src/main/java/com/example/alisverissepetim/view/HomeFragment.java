@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
@@ -22,6 +23,7 @@ import com.example.alisverissepetim.model.ShoppingList;
 import com.example.alisverissepetim.utils.SharedPreferencesHelper;
 import java.util.ArrayList;
 import java.util.List;
+import com.example.alisverissepetim.manager.CartManager;
 
 public class HomeFragment extends Fragment implements RecyclerviewAdapter.OnItemClickListener {
 
@@ -33,6 +35,8 @@ public class HomeFragment extends Fragment implements RecyclerviewAdapter.OnItem
 
     // SharedPreferences helper
     private SharedPreferencesHelper shoppingListPreferences;
+
+    // Swipe-to-delete (tam kaydırma)
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,6 +59,7 @@ public class HomeFragment extends Fragment implements RecyclerviewAdapter.OnItem
         setupRecyclerView();
         setupFragmentResultListener();
         setupClickListeners();
+        setupSwipeToDelete(); // Swipe-to-delete işlemi için
         updateEmptyState();
     }
 
@@ -169,6 +174,110 @@ public class HomeFragment extends Fragment implements RecyclerviewAdapter.OnItem
         });
     }
 
+    private void setupSwipeToDelete() {
+        ItemTouchHelper.SimpleCallback callback = new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView,
+                                  @NonNull RecyclerView.ViewHolder viewHolder,
+                                  @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                final int position = viewHolder.getAdapterPosition();
+                if (position == RecyclerView.NO_POSITION) return;
+
+                final ShoppingList sepet = currentShoppingLists.get(position);
+                final String sepetAdi = sepet.getBasketName();
+
+                new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                        .setTitle("Sepeti sil")
+                        .setMessage("'" + sepetAdi + "' sepetini silmek istiyor musunuz?")
+                        .setPositiveButton("Evet", (dialog, which) -> {
+                            // 1) Sepetin ürünlerini temizle (UI + SharedPreferences)
+                            CartManager.getInstance().clearCart(sepetAdi);
+
+                            // 2) Liste adını SharedPreferences'tan sil
+                            shoppingListPreferences.removeShoppingList(sepetAdi);
+
+                            // 3) UI'dan kaldır
+                            currentShoppingLists.remove(position);
+                            recyclerviewAdapter.notifyItemRemoved(position);
+                            updateEmptyState();
+                        })
+                        .setNegativeButton("Hayır", (dialog, which) -> {
+                            // Satırı geri al
+                            recyclerviewAdapter.notifyItemChanged(position);
+                        })
+                        .setOnCancelListener(d -> {
+                            // Diyalog kapatılırsa satırı geri al
+                            recyclerviewAdapter.notifyItemChanged(position);
+                        })
+                        .show();
+            }
+
+            @Override
+            public void onChildDraw(@NonNull android.graphics.Canvas c,
+                                    @NonNull RecyclerView recyclerView,
+                                    @NonNull RecyclerView.ViewHolder viewHolder,
+                                    float dX, float dY, int actionState, boolean isCurrentlyActive) {
+
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+
+                View itemView = viewHolder.itemView;
+                int itemHeight = itemView.getBottom() - itemView.getTop();
+
+                // Koyu kırmızı arkaplan (radius'lu drawable)
+                android.graphics.drawable.Drawable bg = androidx.core.content.ContextCompat.getDrawable(requireContext(), R.drawable.swipe_bg_red);
+                if (bg != null) {
+                    if (dX > 0) {
+                        bg.setBounds(itemView.getLeft(), itemView.getTop(), (int) (itemView.getLeft() + dX), itemView.getBottom());
+                        bg.draw(c);
+                    } else if (dX < 0) {
+                        bg.setBounds((int) (itemView.getRight() + dX), itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                        bg.draw(c);
+                    } else {
+                        return;
+                    }
+                }
+
+                // Beyaz çöp kutusu ikonu
+                android.graphics.drawable.Drawable deleteIcon =
+                        androidx.core.content.ContextCompat.getDrawable(requireContext(), R.drawable.ic_delete);
+                if (deleteIcon == null) return;
+                deleteIcon = androidx.core.graphics.drawable.DrawableCompat.wrap(deleteIcon.mutate());
+                androidx.core.graphics.drawable.DrawableCompat.setTint(deleteIcon, android.graphics.Color.WHITE);
+
+                int iconWidth = deleteIcon.getIntrinsicWidth();
+                int iconHeight = deleteIcon.getIntrinsicHeight();
+                int iconMargin = (itemHeight - iconHeight) / 2;
+
+                if (dX > 0) {
+                    // Sağda ikon
+                    int iconTop = itemView.getTop() + iconMargin;
+                    int iconLeft = itemView.getLeft() + iconMargin;
+                    int iconRight = iconLeft + iconWidth;
+                    int iconBottom = iconTop + iconHeight;
+                    deleteIcon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
+                } else {
+                    // Solda ikon
+                    int iconTop = itemView.getTop() + iconMargin;
+                    int iconRight = itemView.getRight() - iconMargin;
+                    int iconLeft = iconRight - iconWidth;
+                    int iconBottom = iconTop + iconHeight;
+                    deleteIcon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
+                }
+
+                deleteIcon.draw(c);
+            }
+        };
+
+        new ItemTouchHelper(callback).attachToRecyclerView(recyclerView);
+    }
+
     private void updateEmptyState() {
         if (currentShoppingLists.isEmpty()) {
             emptyStateTextView.setVisibility(View.VISIBLE);
@@ -193,6 +302,14 @@ public class HomeFragment extends Fragment implements RecyclerviewAdapter.OnItem
     // Adapter'dan gelen sepet ikonuna tıklama
     @Override
     public void onCartIconClick(ShoppingList sepet) {
+        // Önce sepet var mı kontrol et
+        boolean hasItems = CartManager.getInstance().hasCart(sepet.getBasketName());
+
+        if (!hasItems) {
+            Toast.makeText(getContext(), sepet.getBasketName() + " sepeti boş", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Toast.makeText(getContext(), sepet.getBasketName() + " sepetine gidiliyor...", Toast.LENGTH_SHORT).show();
         goToCartFragment(getView(), sepet.getBasketName());
     }

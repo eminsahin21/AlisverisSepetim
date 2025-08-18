@@ -474,5 +474,8 @@ public class DetailFragment extends Fragment {
         if (productAdapter != null) {
             productAdapter.cleanup();
         }
+
+        // Sepet verilerini kaydet
+        CartManager.getInstance().onAppClose();
     }
 }
